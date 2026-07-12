@@ -120,13 +120,46 @@
   .project-links a:hover{text-decoration:underline;}
 
   .stairs-wrap{overflow-x:auto; padding-bottom:14px; margin:0 -24px; padding-left:24px; padding-right:24px;}
-  .stairs{position:relative; width:1162px; height:430px;}
-  .stair-col{position:absolute; bottom:0; display:flex; flex-direction:column; align-items:flex-start;}
-  .stair-col:nth-child(1){left:0px; bottom:0px;}
-  .stair-col:nth-child(2){left:238px; bottom:70px;}
-  .stair-col:nth-child(3){left:476px; bottom:140px;}
-  .stair-col:nth-child(4){left:714px; bottom:210px;}
-  .stair-col:nth-child(5){left:952px; bottom:280px;}
+  .stairs{
+    display:flex;
+    align-items:flex-end;
+    gap:0;
+    min-width:max-content;
+  }
+  .stair-col{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    width:220px;
+    flex-shrink:0;
+  }
+  .stair-col:nth-child(1){ margin-bottom:0; }
+  .stair-col:nth-child(2){ margin-bottom:56px; }
+  .stair-col:nth-child(3){ margin-bottom:112px; }
+  .stair-col:nth-child(4){ margin-bottom:168px; }
+  .stair-col:nth-child(5){ margin-bottom:224px; }
+
+  .stair-connector{
+    width:100%;
+    height:24px;
+    position:relative;
+  }
+  .stair-connector::before{
+    content:'';
+    position:absolute;
+    left:11px; top:0; bottom:0;
+    width:2px;
+    background:var(--border);
+  }
+  .stair-connector::after{
+    content:'';
+    position:absolute;
+    left:11px; top:0;
+    width:34px; height:2px;
+    background:var(--border);
+  }
+  .stair-col:first-child .stair-connector{ visibility:hidden; }
+
   .step-num{
     width:22px; height:22px; border-radius:50%; background:var(--accent); color:#161310;
     font-family:'Fraunces',serif; font-weight:600; font-size:12px;
@@ -140,9 +173,6 @@
   .stair-org{color:var(--accent); font-size:12px; margin-bottom:2px;}
   .stair-date{color:var(--text-secondary); font-size:11px; margin-bottom:8px;}
   .stair-line{color:var(--text-secondary); font-size:13px;}
-  .stair-connector{position:absolute; background:var(--border);}
-  .stair-connector.vert{width:2px;}
-  .stair-connector.horiz{height:2px;}
 
   .road{position:relative; padding-left:104px; margin-bottom:36px;}
   .road:last-child{margin-bottom:0;}
@@ -165,24 +195,6 @@
   .photo-fill{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1;}
   .ph-text{position:relative; z-index:0;}
 
-  [contenteditable="true"]{outline:none; border-radius:3px; transition:background 0.15s;}
-  [contenteditable="true"]:hover{background:rgba(195,148,86,0.10); cursor:text;}
-  [contenteditable="true"]:focus{background:rgba(195,148,86,0.16); box-shadow:0 0 0 1px var(--accent);}
-
-  #edit-toolbar{position:sticky; bottom:16px; z-index:20; display:flex; justify-content:center; margin-top:24px;}
-  #edit-toolbar .toolbar-inner{
-    background:var(--surface); border:1px solid var(--border); border-radius:30px;
-    padding:10px 18px; display:flex; align-items:center; gap:12px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.4);
-  }
-  #edit-toolbar span{font-size:12px; color:var(--text-secondary);}
-  #edit-toolbar button{
-    font-family:'Inter',sans-serif; font-size:13px; font-weight:500;
-    background:var(--accent); color:#161310; border:none; padding:8px 16px;
-    border-radius:20px; cursor:pointer;
-  }
-  #edit-toolbar button:hover{background:#D6A868;}
-
   @media(max-width:640px){
     h1{font-size:22px;}
     nav ul{gap:12px;}
@@ -191,8 +203,8 @@
     .project{grid-template-columns:1fr;}
     .project-shot{width:100%;}
     .stairs-wrap{overflow-x:visible; margin:0; padding:0;}
-    .stairs{position:static; width:auto; height:auto; display:flex; flex-direction:column-reverse; gap:14px;}
-    .stair-col{position:static; display:block;}
+    .stairs{flex-direction:column-reverse; align-items:stretch; gap:14px;}
+    .stair-col{width:100%; margin-bottom:0 !important;}
     .stair-item{width:100%; max-width:100%;}
     .stair-connector{display:none;}
     .road{padding-left:64px;}
@@ -206,7 +218,7 @@
 
 <nav>
   <div class="wrap">
-    <div class="logo" contenteditable="true">nabila<span contenteditable="true">.dev</span></div>
+    <div class="logo">nabila<span>.dev</span></div>
     <ul>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
@@ -222,11 +234,11 @@
     <div class="hero-top">
       <div class="hero-photo"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCAJXAZADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD2gClAoFKBTEGKUClApQKAEA5p2KMU7FMQgFOxRilAoGAFLilApQKAAClxS4pcUAJilxSilpAIBS0YpaYAKWiloASlpaKACilooAKMUtFABRRS0AJRS0tACYoxS0YoATFFLRigBMUlLRQAlFLRQAlJinUUANxRinUmKAExSYp1FADMU1x8hqQimuPkNAEIFOFIKdigBRThSCnCgBRThSCnCgDIxTgKMUoFIQAUoFKBS4pgIBTsUYpRQMMUuKXFLigAxS0AUtIApQKKWgApaKWmAlKKMUtABS0UUAFLRS0AFFFLQAlLRS0AJS0UUAFFFLQAlLiiigAooooATFGKWigBKMUtFACYopaMUAJRS4oxQA3FGKWigBMUyQfIakxTZB8hoAhApQKBSigBRThSU4UALSikFOFAGXilFGKWgApcUuKXHtQAgFOAoApwFACAUtLRSAKWilxQAYpaKWmAUtFFABS0UtABRRS0AFFFLQAUUUtABRRS0gEpaKKAClpKWmAUUUUAFFLSUAFFFFABRRRQAUUUUAFFLRQAlJilooASmv8AcNPpr/cNAEIpQKMUooAUUtApaAFpRQKUUAZopcUAUoFABilxS4pcUAGKWjFLSATFLRS0wClopaACiilxQAUooooAWiiloAKKKKAFoopaACiiigBaKKKQBS0lLTAKWkooAWiiigAooooAKKKKACiiigAooooAKKWigBKKWkoAKa/3DTqa/wBw0AQ04UgpaAFpwpBSigBRS0UUAUBS4oFLigAFLRRSAWiiloAKWiimAtFFLQAUtAooAKWiigApaKKACloooAKWiigApaSlpAFFFLTAKKKKAFooooAKKKWgAooooASilooASloooAKKKKACiiigAooooAKa/wBw06mv9w0AQinCm04UAKKWkpwoAWlpKWgCjS0UtIAoopaACiilpgFLRRQAtFFLQAUUUtABS0lLQAUUUUALRRRQAtFFFIBaKKKACloooAKWkpaACiiimAtFJS0AFFFFABRRRQAUUUUAFFFFABRS0UgCiiigBKR/uGnU1/uGgCGlpBS0wFp1NpwoAUUopKUUAU6KXFFIApaKKYBS0Ud6ACloooAKWiigApaKKACloooAKWkpaAClpKWgAoopaQBRRRTAKWkpaAClpKWgAooooAKWiigAooooAKKKKACiiigApaKKQBRRRQAUUUUAFNf7hp1Nf7hoAgXqfSnCkpaYDhSiminUALS0lKKAKlLRRQAUtFFABS0UUAFFFLQAUUUtABRRRQAtFFFABS0lLQAUtJS0AFLSUtIAooopgFLSUtABRRRQAtFFFABS0lLQAUUUUAFFFFABRRRQAUUUUALRRRSAKKKKACmv9w06mv8AcNAENLSUtMBRThTRS0ALS0lLQBXoopaAEpaKKACiiloAKKKKACloooAKKKKAFooooAKWkpaAClpKWgApaSigBaKKKACiiloAKKKKAClpKWgAooooAKWkooAWiiigAooooAKKKKAClpKWgAooopAFNf7hp1Nf7hoAhFLSUtMBRS0lKKAFpaSlFAEFFFFABRRS0AFFFFABRRS0AFFFFABRRRQAtFFFABS0lLQAUtJRQAtFFFAC0UUUAFFFFAC0UUUAFFFFABS0lLQAUUUUAFFFFABS0lLQAUUUUAFFFFAC0UlLSAKa/wBw06mv9w/SgCGlpKKYDqWm0ooAdS0lFAENFLRQAUUUUAFFFLQAlLRRQAUUUUALRRSUALRRRQAUtJRQA0yAA855xT6TApaACloooAKWkooAWikpaACiiigBaKSloAKKKKAFpKKKAFopKWgAooooAKWkooAWikpaACiiigApG+4aWkb7hoAhpabSigBaWkpRQAtLSUtAEVFFFABS0lLQAUUUUAFFFFABRRRQAUtFFABRRRQAUUUUALRSUtABS0lLQAUUUUAFLSUtABRRRQAUUUUALRRRQAUUUUAFFFFABS0lFAC0UUUAFFFFAC0UlLQAUjfcNLTW+4aAIaWkpaAFpRSUtAC0tNpaAI6WkpaACiiigAooooAKKKKACiiigBaKSigBaKKKACiiigAoopaACiiigApaSloAKKKKAFopKWgAooooAKWkooAWikpaACiiigAooooAKKKKAFopKWgAooooAKR/uGlpG+4aAIaKSloAWlpBS0ALS0lFADaKKKACiiigAooooAKKKKACiiigAooooAKWkpaACiiigAooooAWikpaACqWqaxp+i2hudRu47aIdC55b2A6msLxv45tPCFkq4FxqEw/cwZ6f7Teg/nXz14l8XS6pfPdatevPM3RFPCewHQD2qkribPXtW+N9hbu0emadJcY/wCWkzbAfwGTWLH8bdXkkz/Z9iEz935v55rxtdesGbG2RffrWhZzW9yc28m4/wB3v+VWkidT3DT/AIzRSMq32lFB0LQyZ/Q/413mi+JdK1+HfYXSuwGWib5XX6ivmmEbVDZx6girVrqEtpOk9tM8UiHKsjYIpuC6C5mfUNFed+BfiMNXlj0zVWVbpuIp+gkPofQ/zr0SsmrF3uFFFFIYUUUUAFLSUUALRSUtABRRRQAUUUUALSUUUALTX5Q06mv9w0AQ0opKWgBRS02nUALRSUtADaKKKACiiigAooooAKKKKACiiigAooooAKWkooAWiiigAooooAWs3xBrVv4d0C71W55jtk3bc/eboFH1OK0a8G+PXjPdeL4etpP3dqFeYA9ZWGQP+Arj8WpoDy/xX4tvdZ1e4vbi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" alt="Nabila Hatami Putri" class="photo-fill"></div>
       <div>
-        <div class="eyebrow" contenteditable="true">Final year, telecommunications engineering</div>
-        <h1 contenteditable="true">Building systems that connect hardware, data, and <em>people</em>.</h1>
+        <div class="eyebrow">Final year, telecommunications engineering</div>
+        <h1>Building systems that connect hardware, data, and <em>people</em>.</h1>
       </div>
     </div>
-    <p class="hero-sub" contenteditable="true">I design and build application systems, from dashboards to backend APIs and IoT integrations. Looking for an IT Staff role to keep building in dashboard development and data-driven systems.</p>
+    <p class="hero-sub">I design and build application systems, from dashboards to backend APIs and IoT integrations. Looking for an IT Staff role to keep building in dashboard development and data-driven systems.</p>
     <div class="hero-actions">
       <a href="#projects" class="btn btn-primary">View projects</a>
       <a href="mailto:nabilahatamiputri888@gmail.com" class="btn btn-ghost">Get in touch</a>
@@ -234,16 +246,16 @@
 
     <div class="stat-row">
       <div class="stat">
-        <div class="label" contenteditable="true">Projects built</div>
-        <div class="value" contenteditable="true">3</div>
+        <div class="label">Projects built</div>
+        <div class="value">3</div>
       </div>
       <div class="stat">
-        <div class="label" contenteditable="true">User growth driven</div>
-        <div class="value" contenteditable="true">225%</div>
+        <div class="label">User growth driven</div>
+        <div class="value">225%</div>
       </div>
       <div class="stat">
-        <div class="label" contenteditable="true">Systems integrated</div>
-        <div class="value" contenteditable="true">3</div>
+        <div class="label">Systems integrated</div>
+        <div class="value">3</div>
       </div>
     </div>
   </div>
@@ -253,20 +265,20 @@
   <div class="wrap">
     <h2>Skills</h2>
     <div class="skill-row">
-      <div class="cat" contenteditable="true">Programming</div>
-      <div class="skill-list" contenteditable="true">Node.js, Express.js, Python, C, MySQL</div>
+      <div class="cat">Programming</div>
+      <div class="skill-list">Node.js, Express.js, Python, C, MySQL</div>
     </div>
     <div class="skill-row">
-      <div class="cat" contenteditable="true">Dashboard &amp; analytics</div>
-      <div class="skill-list" contenteditable="true">Looker Studio, SEO analysis</div>
+      <div class="cat">Dashboard &amp; analytics</div>
+      <div class="skill-list">Looker Studio, SEO analysis</div>
     </div>
     <div class="skill-row">
-      <div class="cat" contenteditable="true">System &amp; integration</div>
-      <div class="skill-list" contenteditable="true">REST API, IoT integration, V-Model SDLC</div>
+      <div class="cat">System &amp; integration</div>
+      <div class="skill-list">REST API, IoT integration, V-Model SDLC</div>
     </div>
     <div class="skill-row">
-      <div class="cat" contenteditable="true">Tools</div>
-      <div class="skill-list" contenteditable="true">GitHub, Postman, Railway, WordPress</div>
+      <div class="cat">Tools</div>
+      <div class="skill-list">GitHub, Postman, Railway, WordPress</div>
     </div>
   </div>
 </section>
@@ -282,10 +294,10 @@
       </div>
       <div>
         <div class="project-top">
-          <div class="project-title" contenteditable="true">Website performance dashboard</div>
-          <div class="project-tag" contenteditable="true">Looker Studio</div>
+          <div class="project-title">Website performance dashboard</div>
+          <div class="project-tag">Looker Studio</div>
         </div>
-        <p contenteditable="true">Built dashboards that drove a 225% jump in users, from 3,794 to 12,306.</p>
+        <p>Built dashboards that drove a 225% jump in users, from 3,794 to 12,306.</p>
       </div>
     </div>
 
@@ -297,10 +309,10 @@
       </div>
       <div>
         <div class="project-top">
-          <div class="project-title" contenteditable="true">Wearable IoT assistive system</div>
-          <div class="project-tag" contenteditable="true">Node.js + MySQL</div>
+          <div class="project-title">Wearable IoT assistive system</div>
+          <div class="project-tag">Node.js + MySQL</div>
         </div>
-        <p contenteditable="true">REST API and database backend for a real-time sensor-based wearable, built for deaf students.</p>
+        <p>REST API and database backend for a real-time sensor-based wearable, built for deaf students.</p>
         <div class="project-links"><a href="https://github.com/nabilahatamip/sora-backend">GitHub repo →</a></div>
       </div>
     </div>
@@ -312,10 +324,10 @@
       </div>
       <div>
         <div class="project-top">
-          <div class="project-title" contenteditable="true">Smart door security system</div>
-          <div class="project-tag" contenteditable="true">Python + OpenCV</div>
+          <div class="project-title">Smart door security system</div>
+          <div class="project-tag">Python + OpenCV</div>
         </div>
-        <p contenteditable="true">RFID and AI face recognition combined into one working authentication system.</p>
+        <p>RFID and AI face recognition combined into one working authentication system.</p>
         <div class="project-links"><a href="https://github.com/nabilahatamip/rfid-camera-auth-system">GitHub repo →</a></div>
       </div>
     </div>
@@ -327,60 +339,62 @@
     <h2>Experience</h2>
     <div class="stairs-wrap">
       <div class="stairs">
-        <div class="stair-connector vert" style="left:210px; bottom:0px; height:70px;"></div>
-        <div class="stair-connector horiz" style="left:210px; bottom:70px; width:28px;"></div>
-        <div class="stair-connector vert" style="left:448px; bottom:70px; height:70px;"></div>
-        <div class="stair-connector horiz" style="left:448px; bottom:140px; width:28px;"></div>
-        <div class="stair-connector vert" style="left:686px; bottom:140px; height:70px;"></div>
-        <div class="stair-connector horiz" style="left:686px; bottom:210px; width:28px;"></div>
-        <div class="stair-connector vert" style="left:924px; bottom:210px; height:70px;"></div>
-        <div class="stair-connector horiz" style="left:924px; bottom:280px; width:28px;"></div>
 
         <div class="stair-col">
+          <div class="stair-connector"></div>
           <div class="step-num">1</div>
           <div class="stair-item">
-            <div class="stair-role" contenteditable="true">Marketing External Relations</div>
-            <div class="stair-org" contenteditable="true">FLICK N FIT</div>
-            <div class="stair-date" contenteditable="true">Aug 2024 – Dec 2025</div>
-            <div class="stair-line" contenteditable="true">Managed 50+ partner relationships, keeping information delivery timely and accurate.</div>
+            <div class="stair-role">Marketing External Relations</div>
+            <div class="stair-org">FLICK N FIT</div>
+            <div class="stair-date">Aug 2024 – Dec 2025</div>
+            <div class="stair-line">Managed 50+ partner relationships, keeping information delivery timely and accurate.</div>
           </div>
         </div>
+
         <div class="stair-col">
+          <div class="stair-connector"></div>
           <div class="step-num">2</div>
           <div class="stair-item">
-            <div class="stair-role" contenteditable="true">WordPress Specialist</div>
-            <div class="stair-org" contenteditable="true">HUMIC Research Center</div>
-            <div class="stair-date" contenteditable="true">Sep – Nov 2024</div>
-            <div class="stair-line" contenteditable="true">Built tracking dashboards that grew site users 225%, from 3,794 to 12,306.</div>
+            <div class="stair-role">WordPress Specialist</div>
+            <div class="stair-org">HUMIC Research Center</div>
+            <div class="stair-date">Sep – Nov 2024</div>
+            <div class="stair-line">Built tracking dashboards that grew site users 225%, from 3,794 to 12,306.</div>
           </div>
         </div>
+
         <div class="stair-col">
+          <div class="stair-connector"></div>
           <div class="step-num">3</div>
           <div class="stair-item">
-            <div class="stair-role" contenteditable="true">Project Intern</div>
-            <div class="stair-org" contenteditable="true">PUI-PT Intelligent Sensing</div>
-            <div class="stair-date" contenteditable="true">Feb – May 2025</div>
-            <div class="stair-line" contenteditable="true">Designed and delivered a working RFID + face recognition door security system.</div>
+            <div class="stair-role">Project Intern</div>
+            <div class="stair-org">PUI-PT Intelligent Sensing</div>
+            <div class="stair-date">Feb – May 2025</div>
+            <div class="stair-line">Designed and delivered a working RFID + face recognition door security system.</div>
           </div>
         </div>
+
         <div class="stair-col">
+          <div class="stair-connector"></div>
           <div class="step-num">4</div>
           <div class="stair-item">
-            <div class="stair-role" contenteditable="true">System Analyst</div>
-            <div class="stair-org" contenteditable="true">PT Len Industri (Persero)</div>
-            <div class="stair-date" contenteditable="true">Jun – Sep 2025</div>
-            <div class="stair-line" contenteditable="true">Evaluated 35 radio systems across 6 series, informing the procurement decision.</div>
+            <div class="stair-role">System Analyst</div>
+            <div class="stair-org">PT Len Industri (Persero)</div>
+            <div class="stair-date">Jun – Sep 2025</div>
+            <div class="stair-line">Evaluated 35 radio systems across 6 series, informing the procurement decision.</div>
           </div>
         </div>
+
         <div class="stair-col">
+          <div class="stair-connector"></div>
           <div class="step-num">5</div>
           <div class="stair-item">
-            <div class="stair-role" contenteditable="true">Junior Project Manager</div>
-            <div class="stair-org" contenteditable="true">VINIX7</div>
-            <div class="stair-date" contenteditable="true">Feb – Jun 2026</div>
-            <div class="stair-line" contenteditable="true">Structured WBS and workflow maps, keeping delivery on schedule and on spec.</div>
+            <div class="stair-role">Junior Project Manager</div>
+            <div class="stair-org">VINIX7</div>
+            <div class="stair-date">Feb – Jun 2026</div>
+            <div class="stair-line">Structured WBS and workflow maps, keeping delivery on schedule and on spec.</div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -390,89 +404,89 @@
   <div class="wrap">
     <h2>Organizations &amp; volunteering</h2>
 
-    <div class="road-subhead" contenteditable="true">Organizations</div>
+    <div class="road-subhead">Organizations</div>
     <div class="road">
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Dec 2022</div>
+        <div class="road-date">Dec 2022</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Dorm Team</div>
-        <div class="road-result" contenteditable="true">Coordinated daily operations for a 40-person dormitory floor.</div>
+        <div class="road-title">Dorm Team</div>
+        <div class="road-result">Coordinated daily operations for a 40-person dormitory floor.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Feb 2023</div>
+        <div class="road-date">Feb 2023</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Network Division</div>
-        <div class="road-result" contenteditable="true">Ran the UI/UX and Kaggle tracks for CCI Summit 2024, 71 participants.</div>
+        <div class="road-title">Network Division</div>
+        <div class="road-result">Ran the UI/UX and Kaggle tracks for CCI Summit 2024, 71 participants.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Dec 2023</div>
+        <div class="road-date">Dec 2023</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Public Relations</div>
-        <div class="road-result" contenteditable="true">Kept exhibitor communications smooth and consistent throughout the event.</div>
+        <div class="road-title">Public Relations</div>
+        <div class="road-result">Kept exhibitor communications smooth and consistent throughout the event.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Apr 2024</div>
+        <div class="road-date">Apr 2024</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Junior Staff, Professional Dept.</div>
-        <div class="road-result" contenteditable="true">Curated 30+ weekly internship and job listings for members.</div>
+        <div class="road-title">Junior Staff, Professional Dept.</div>
+        <div class="road-result">Curated 30+ weekly internship and job listings for members.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Jun 2024</div>
+        <div class="road-date">Jun 2024</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Expert Staff, Professional Dept.</div>
-        <div class="road-result" contenteditable="true">Delivered an industrial visit to PT XL Axiata Tbk for 40 students.</div>
+        <div class="road-title">Expert Staff, Professional Dept.</div>
+        <div class="road-result">Delivered an industrial visit to PT XL Axiata Tbk for 40 students.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Apr 2025</div>
+        <div class="road-date">Apr 2025</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Practicum Assistant</div>
-        <div class="road-result" contenteditable="true">Coordinated lab administration for 400+ students across 3 practicum modules.</div>
+        <div class="road-title">Practicum Assistant</div>
+        <div class="road-result">Coordinated lab administration for 400+ students across 3 practicum modules.</div>
       </div>
     </div>
 
-    <div class="road-subhead" contenteditable="true">Volunteering</div>
+    <div class="road-subhead">Volunteering</div>
     <div class="road">
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Sep 2023</div>
+        <div class="road-date">Sep 2023</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Waste treatment socialization</div>
-        <div class="road-result" contenteditable="true">Increased resident participation in wastewater facility upkeep.</div>
+        <div class="road-title">Waste treatment socialization</div>
+        <div class="road-result">Increased resident participation in wastewater facility upkeep.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Feb 2024</div>
+        <div class="road-date">Feb 2024</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Team leader, water filtration</div>
-        <div class="road-result" contenteditable="true">Delivered clearer, odor-free filtered water for the community.</div>
+        <div class="road-title">Team leader, water filtration</div>
+        <div class="road-result">Delivered clearer, odor-free filtered water for the community.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Feb 2024</div>
+        <div class="road-date">Feb 2024</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Aquaponic system design</div>
-        <div class="road-result" contenteditable="true">Built a pH and moisture-sensor aquaponic system to support local UMKM.</div>
+        <div class="road-title">Aquaponic system design</div>
+        <div class="road-result">Built a pH and moisture-sensor aquaponic system to support local UMKM.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Jul 2024</div>
+        <div class="road-date">Jul 2024</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Liaison Officer</div>
-        <div class="road-result" contenteditable="true">Kept information flow smooth between the core team and new students.</div>
+        <div class="road-title">Liaison Officer</div>
+        <div class="road-result">Kept information flow smooth between the core team and new students.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Aug 2024</div>
+        <div class="road-date">Aug 2024</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">Aquaponic monitoring project</div>
-        <div class="road-result" contenteditable="true">Paired fish-waste filtration with plant growth in a working prototype.</div>
+        <div class="road-title">Aquaponic monitoring project</div>
+        <div class="road-result">Paired fish-waste filtration with plant growth in a working prototype.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Aug 2025</div>
+        <div class="road-date">Aug 2025</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">AI training facilitator</div>
-        <div class="road-result" contenteditable="true">Trained teachers on AI tools through hands-on classroom mentoring.</div>
+        <div class="road-title">AI training facilitator</div>
+        <div class="road-result">Trained teachers on AI tools through hands-on classroom mentoring.</div>
       </div>
       <div class="road-item">
-        <div class="road-date" contenteditable="true">Aug 2025</div>
+        <div class="road-date">Aug 2025</div>
         <div class="road-dot"></div>
-        <div class="road-title" contenteditable="true">AIoT translation facilitator</div>
-        <div class="road-result" contenteditable="true">Supported deployment of an AIoT sign language translation tool.</div>
+        <div class="road-title">AIoT translation facilitator</div>
+        <div class="road-result">Supported deployment of an AIoT sign language translation tool.</div>
       </div>
     </div>
   </div>
@@ -483,34 +497,10 @@
     <div class="contact-links">
       <a href="mailto:nabilahatamiputri888@gmail.com">Email</a>
       <a href="https://www.linkedin.com/in/nabilahatamiputri" target="_blank">LinkedIn</a>
-      <a href="#">GitHub</a>
-      <a href="tel:+6287744904593">+62 877-4490-4593</a>
     </div>
-    <div class="copyright" contenteditable="true">© 2026 Nabila Hatami Putri. Built with HTML, CSS &amp; JavaScript.</div>
+    <div class="copyright">© 2026 Nabila Hatami Putri. Built with HTML, CSS &amp; JavaScript.</div>
   </div>
 </footer>
-
-<div id="edit-toolbar">
-  <div class="toolbar-inner">
-    <span>Klik teks mana pun untuk edit langsung</span>
-    <button onclick="saveEditedFile()">Simpan perubahan</button>
-  </div>
-</div>
-
-<script>
-function saveEditedFile(){
-  document.querySelectorAll('[contenteditable="true"]').forEach(function(el){
-    el.removeAttribute('contenteditable');
-  });
-  document.getElementById('edit-toolbar').remove();
-  var htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  var blob = new Blob([htmlContent], {type: 'text/html'});
-  var link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'index.html';
-  link.click();
-}
-</script>
 
 </body>
 </html>
